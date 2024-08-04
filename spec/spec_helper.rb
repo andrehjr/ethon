@@ -6,6 +6,7 @@ require 'bundler'
 Bundler.setup
 require "ethon"
 require 'rspec'
+require 'sinatra'
 
 if defined? require_relative
   require_relative 'support/localhost_server'

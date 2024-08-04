@@ -2,7 +2,6 @@
 # frozen_string_literal: true
 require 'json'
 require 'zlib'
-require 'sinatra/base'
 
 TESTSERVER = Sinatra.new do
   set :logging, nil
