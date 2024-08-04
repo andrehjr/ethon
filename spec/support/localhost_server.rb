@@ -53,6 +53,7 @@ class LocalhostServer
   def booted?
     res = ::Net::HTTP.get_response("localhost", '/__identify__', port)
     if res.is_a?(::Net::HTTPSuccess) or res.is_a?(::Net::HTTPRedirection)
+      p res.body
       return res.body == READY_MESSAGE
     end
     p res
