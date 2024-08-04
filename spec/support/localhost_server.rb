@@ -28,7 +28,7 @@ class LocalhostServer
     @port = port || find_available_port
     @rack_app = rack_app
     concurrently { boot }
-    wait_until(10, "Boot failed.") { booted? }
+    wait_until(15, "Boot failed.") { booted? }
   end
 
   private
