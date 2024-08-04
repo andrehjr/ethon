@@ -56,6 +56,8 @@ class LocalhostServer
       return res.body == READY_MESSAGE
     end
     p res
+    p res.body
+    false
   rescue Errno::ECONNREFUSED, Errno::EBADF => e
     p e
     return false
