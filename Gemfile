@@ -9,7 +9,7 @@ else
 end
 
 group :development, :test do
-  gem "rspec", "~> 3.4"
+  gem "rspec"
 
   gem "sinatra", '~> 2.0'
   gem "rack", '< 3'
