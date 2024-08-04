@@ -11,7 +11,8 @@ end
 group :development, :test do
   gem "rspec", "~> 3.4"
 
-  gem "sinatra"
+  gem "sinatra", '~> 2.0'
+  gem "rack", '< 3'
 
   if Gem.ruby_version < Gem::Version.new("2.0.0")
     gem "json", "< 2"
