@@ -41,10 +41,13 @@ class LocalhostServer
   end
 
   def boot
+    puts "Booting server"
     # Use WEBrick since it's part of the ruby standard library and is available on all ruby interpreters.
     options = { :Port => port }
-    options.merge!(:AccessLog => [], :Logger => WEBrick::BasicLog.new(StringIO.new)) unless ENV['VERBOSE_SERVER']
-    Rack::Handler::WEBrick.run(Identify.new(@rack_app), **options)
+    options.merge!(:AccessLog => [], :Logger => WEBrick::BasicLog.new(StringIO.new)) #  unless ENV['VERBOSE_SERVER']
+    rs = Rack::Handler::WEBrick.run(Identify.new(@rack_app), **options)
+    p rs
+    rs
   end
 
   def booted?
@@ -52,7 +55,8 @@ class LocalhostServer
     if res.is_a?(::Net::HTTPSuccess) or res.is_a?(::Net::HTTPRedirection)
       return res.body == READY_MESSAGE
     end
-  rescue Errno::ECONNREFUSED, Errno::EBADF
+  rescue Errno::ECONNREFUSED, Errno::EBADF => e
+    p e
     return false
   end
 
