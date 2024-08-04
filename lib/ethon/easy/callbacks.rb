@@ -25,7 +25,6 @@ module Ethon
         Curl.set_option(:debugfunction, debug_callback, handle)
         @response_body = String.new
         @response_headers = String.new
-        @headers_called = false
         @debug_info = Ethon::Easy::DebugInfo.new
       end
 
@@ -37,7 +36,6 @@ module Ethon
       # @return [ Proc ] The callback.
       def body_write_callback
         @body_write_callback ||= proc do |stream, size, num, object|
-          headers
           result = body(chunk = stream.read_string(size * num))
           @response_body << chunk if result == :unyielded
           result != :abort ? size * num : -1
@@ -52,8 +50,9 @@ module Ethon
       # @return [ Proc ] The callback.
       def header_write_callback
         @header_write_callback ||= proc {|stream, size, num, object|
-          result = headers
-          @response_headers << stream.read_string(size * num)
+          chunk = stream.read_string(size * num)
+          @response_headers << chunk
+          result = headers(chunk)
           result != :abort ? size * num : -1
         }
       end

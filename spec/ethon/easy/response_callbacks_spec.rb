@@ -58,13 +58,13 @@ describe Ethon::Easy::ResponseCallbacks do
 
     it "executes blocks and passes self" do
       expect(String).to receive(:new).with(easy.url)
-      easy.headers
+      easy.headers("some_header")
     end
 
     context "when @on_headers nil" do
       it "doesn't raise" do
         easy.instance_variable_set(:@on_headers, nil)
-        expect{ easy.headers }.to_not raise_error
+        expect{ easy.headers("some_header") }.to_not raise_error
       end
     end
   end

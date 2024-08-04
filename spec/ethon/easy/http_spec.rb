@@ -45,11 +45,11 @@ describe Ethon::Easy::Http do
 
           it "notifies when headers are ready" do
             headers = []
-            easy.on_headers { |r| headers << r.response_headers }
+            easy.on_headers { |r, chunk| headers << chunk; }
             easy.http_request(url, action, options)
             easy.perform
-            expect(headers).to eq([easy.response_headers])
-            expect(headers.first).to match(/Content-Length: (\d+)/)
+            expect(headers.join("")).to eq(easy.response_headers)
+            expect(headers[2]).to match(/Content-Length: (\d+)/)
           end
         end
       end
