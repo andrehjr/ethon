@@ -55,6 +55,7 @@ class LocalhostServer
     if res.is_a?(::Net::HTTPSuccess) or res.is_a?(::Net::HTTPRedirection)
       return res.body == READY_MESSAGE
     end
+    p res
   rescue Errno::ECONNREFUSED, Errno::EBADF => e
     p e
     return false
