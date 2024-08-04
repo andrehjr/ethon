@@ -2,6 +2,7 @@
 require 'rack'
 require 'rack/handler/webrick'
 require 'net/http'
+require 'timeout'
 
 # The code for this is inspired by Capybara's server:
 #   http://github.com/jnicklas/capybara/blob/0.3.9/lib/capybara/server.rb
@@ -87,7 +88,7 @@ class LocalhostServer
 
     while true
       return if yield
-      raise TimeoutError.new(error_message) if (Time.now - start_time) > timeout
+      raise Timeout::TimeoutError.new(error_message) if (Time.now - start_time) > timeout
       sleep(0.05)
     end
   end
