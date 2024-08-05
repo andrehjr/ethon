@@ -33,8 +33,9 @@ group :development, :test do
   end
 
   if Gem.ruby_version >= Gem::Version.new("3.0.0")
-    gem "webrick"
     gem "base64"
+    gem "net-http", "~> 0.3.0"
+    gem "webrick"
   end
 end
 

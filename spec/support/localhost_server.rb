@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rack'
-require 'rack/handler/webrick'
 require 'net/http'
+require 'webrick'
 
 # The code for this is inspired by Capybara's server:
 #   http://github.com/jnicklas/capybara/blob/0.3.9/lib/capybara/server.rb
@@ -28,7 +28,7 @@ class LocalhostServer
     @port = port || find_available_port
     @rack_app = rack_app
     concurrently { boot }
-    wait_until(15, "Boot failed.") { booted? }
+    wait_until(10, "Boot failed.") { booted? }
   end
 
   private
@@ -41,23 +41,17 @@ class LocalhostServer
   end
 
   def boot
-    puts "Booting server"
     # Use WEBrick since it's part of the ruby standard library and is available on all ruby interpreters.
     options = { :Port => port }
-    options.merge!(:AccessLog => [], :Logger => WEBrick::BasicLog.new(StringIO.new)) #  unless ENV['VERBOSE_SERVER']
-    rs = Rack::Handler::WEBrick.run(Identify.new(@rack_app), **options)
-    p rs
-    rs
+    options.merge!(:AccessLog => [], :Logger => WEBrick::BasicLog.new(StringIO.new)) unless ENV['VERBOSE_SERVER']
+    Rack::Handler::WEBrick.run(Identify.new(@rack_app), **options)
   end
 
   def booted?
     res = ::Net::HTTP.get_response("localhost", '/__identify__', port)
     if res.is_a?(::Net::HTTPSuccess) or res.is_a?(::Net::HTTPRedirection)
-      p res.body
       return res.body == READY_MESSAGE
     end
-    p res
-    p res.body
     false
   rescue Errno::ECONNREFUSED, Errno::EBADF => e
     p e
